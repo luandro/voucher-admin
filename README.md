@@ -8,6 +8,9 @@ Para usar esse script você precisa estar conectado ao gateway de uma rede mesh 
 Para rodar em sua máquina faça:
 
 git clone https://github.com/coolabnet/VoucherAdmin-v2.0.git
+
 cd VoucherAdmin-v2.0/
+
 chmod +x VoucherAdmin-v2.0.sh
+
 ./VoucherAdmin-v2.0.sh
