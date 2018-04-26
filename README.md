@@ -13,4 +13,4 @@ cd VoucherAdmin-v2.0/
 
 chmod +x VoucherAdmin-v2.0.sh
 
-./VoucherAdmin-v2.0.sh
+./voucherAdmin-v2.0.sh
