@@ -20,12 +20,12 @@ while [ ! $op -eq 6 ]; do
 
     1) clear
 
-    echo Eu tenho `cat db.csv | wc -l` vouchers cadastrados
-    echo "Que São:"
+    echo Temos `cat db.csv | wc -l` vouchers cadastrados:
+    echo ""
     sort -o db.csv db.csv
     cat db.csv
 
-      echo "Aperte uma tecla para continuar..."
+      echo "Aperte ENTER para continuar..."
       read
       ;;
 
@@ -36,39 +36,35 @@ while [ ! $op -eq 6 ]; do
       echo "|                                                   |"
       echo "|                                                   |"
       echo "|    Para cadastrar um novo usuario digite          |"
-      echo "|    um nome e uma sequencia com 12 digitos         |"
+      echo "|    um nome                                        |"
       echo "|                                                   |"
       echo "|___________________________________________________|"
 
 
       printf "Digite o nome do usuario: "
+      echo ""
       read nome
-
         if [ ${#nome}=0 ]
         then
-        printf "Digite um voucher de 12 digitos: "
-        read voucher
-	        if [ ${#voucher} -ne 12 ]
-	        then
-	        echo "O voucher que vc digitou tem ${#voucher}, e ele precisa ter 12 digitos"
-	        else
-	        echo "$nome,$voucher,," >> db.csv
+          voucher=$(date |md5 | head -c12)
+          echo "$nome,$voucher,," >> db.csv
           sort -o db.csv db.csv
 	        echo "Usuario $nome cadastrado com o voucher $voucher"
-          fi
+          echo ""
         else
         echo "Não deixe o nome em branco, isso atrapalha a vida!"
+        echo ""
         fi
       cat db.csv
       printf "Deseja cadastrar usuario novamente?(s ou n)"
       read cont
         case $cont in
-          S|s|sim|SIM|Y|yes|YES) cont=1
+          S|s|sim|SIM|Y|yes|YES|y) cont=1
           ;;
           N|n|nao|Nao|NO|no) cont=2
          ;;
         *) echo "Opcao invalida"
-          echo "Aperte uma tecla para continuar..."
+          echo "Aperte ENTER para continuar..."
           read
         esac #fim do while 8
       done
@@ -108,17 +104,17 @@ while [ ! $op -eq 6 ]; do
       printf "Deseja consultar prazo para usuario novamente?(s ou n)"
       read consulta
       case $consulta in
-        S|s|sim|SIM|Y|yes|YES) consulta=1
+        S|s|sim|SIM|Y|yes|YES|y) consulta=1
           ;;
         N|n|nao|Nao|NO|no) consulta=2
          ;;
         *) echo "Opcao invalida"
-          echo "Aperte uma tecla para continuar..."
+          echo "Aperte ENTER para continuar..."
           read
       esac #fim do while 8
     done
 
-   echo "Aperte uma tecla para continuar..."
+   echo "Aperte ENTER para continuar..."
    read
    ;;
 
@@ -155,17 +151,17 @@ while [ ! $op -eq 6 ]; do
     printf "Deseja remover mais usuarios?(s ou n)"
       read remval
       case $remval in
-        S|s|sim|SIM|Y|yes|YES) remval=1
+        S|s|sim|SIM|Y|yes|YES|y) remval=1
           ;;
         N|n|nao|Nao|NO|no) remval=2
          ;;
         *) echo "Opcao invalida"
-          echo "Aperte uma tecla para continuar..."
+          echo "Aperte ENTER para continuar..."
           read
       esac #fim do while 8
     done
 
-     echo "Aperte uma tecla para continuar..."
+     echo "Aperte ENTER para continuar..."
      read
      ;;
 
@@ -188,33 +184,26 @@ while [ ! $op -eq 6 ]; do
       then
       grep -v "$nome" db.csv > /tmp/$$
       mv /tmp/$$ db.csv
-
-      printf "Digite um voucher de 12 digitos: "
-      read voucher
-        if [ ${#voucher} -ne 12 ]
-        then
-        echo "O voucher que vc digitou tem ${#voucher}, e ele precisa ter 12 digitos"
-        else
-        echo "$nome,$voucher,," >> db.csv
-        sort -o db.csv db.csv
-        fi
+      voucher=$(date |md5 | head -c12)
+      echo "$nome,$voucher,," >> db.csv
+      sort -o db.csv db.csv
       else
       echo "Não deixe o nome em branco, isso atrapalha a vida!"
       fi
     printf "Deseja editar mais usuarios?(s ou n)"
       read remval
       case $remval in
-        S|s|sim|SIM|Y|yes|YES) remval=1
+        S|s|sim|SIM|Y|yes|YES|y) remval=1
           ;;
         N|n|nao|Nao|NO|no) remval=2
          ;;
         *) echo "Opcao invalida"
-          echo "Aperte uma tecla para continuar..."
+          echo "Aperte ENTER para continuar..."
           read
       esac #fim do while 8
     done
 
-    echo "Aperte uma tecla para continuar..."
+    echo "Aperte ENTER para continuar..."
     read
     ;;
 
@@ -222,7 +211,7 @@ while [ ! $op -eq 6 ]; do
       echo "Deseja realmente sair?"
       read res
       case $res in
-        S|s|sim|SIM|Y|yes|YES) op=6
+        S|s|sim|SIM|Y|yes|YES|y) op=6
 
           if diff db.csv db2.csv >/dev/null ; then
             echo "Nenhuma alteração foi encontrada"
@@ -231,7 +220,7 @@ while [ ! $op -eq 6 ]; do
               printf "Deseja salvar as alterações no Gateway?: "
               read respb
               case $respb in
-              S|s|sim|SIM|Y|yes|YES)
+              S|s|sim|SIM|Y|yes|YES|y)
               scp ./db.csv root@thisnode.info:/etc/nodogsplash/vale/db.csv
               echo "Alterações realiadas com sucesso!"
               ;;
@@ -239,7 +228,7 @@ while [ ! $op -eq 6 ]; do
                 echo "Ok, as alterações feitas na secção não foram implementadas Gataway"
                 ;;
               *) echo "Opção invalida"
-                echo "aperte uma tecla para continuar"
+                echo "aperte ENTER para continuar"
               esac
           fi
           cat db.csv
@@ -247,20 +236,20 @@ while [ ! $op -eq 6 ]; do
         N|n|nao|Nao|NO|no) op=0
           ;;
         *) echo "Opcao invalida"
-          echo "Aperte uma tecla para continuar..."
+          echo "Aperte ENTER para continuar..."
           read
       esac #fim do while 8
       ;;
 
     7|8|9|1[0-2]) clear
       echo "Opcao ainda nao implementada."
-      echo "Aperte uma tecla para continuar..."
+      echo "Aperte ENTER para continuar..."
       read
       ;;
 
     *) clear
       echo "Opcao invalida."
-      echo "Aperte uma tecla para continuar..."
+      echo "Aperte ENTER para continuar..."
       read
       ;;
 
